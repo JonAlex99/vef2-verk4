@@ -15,7 +15,7 @@ async function moveEarthquakes(type, period, title1) {
 
   const parent = loading.parentNode;
 
-  if (period === 'month"') {
+  if (period === 'month') {
     head.innerHTML = (`${title1}, Seinasta mánuð`);
   } else if (period === 'week') {
     head.innerHTML = (`${title1}, Seinastu viku`);

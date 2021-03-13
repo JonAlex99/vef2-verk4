@@ -1,15 +1,22 @@
 // TODO útfæra redis cache
 import redis from 'redis';
 import util from 'util';
+import dotenv from 'dotenv';
 
-const redisOptions = {
-  url: 'redis://127.0.0.1:6379/0',
-};
+dotenv.config();
 
-const client = redis.createClient(redisOptions);
+const { REDIS_URL } = process.env;
 
-const asyncGet = util.promisify(client.get).bind(client);
-const asyncSet = util.promisify(client.set).bind(client);
+let client;
+let asyncGet;
+let asyncSet;
+
+if (REDIS_URL) {
+  client = redis.createClient({ url: REDIS_URL });
+  asyncGet = util.promisify(client.get).bind(client);
+  asyncSet = util.promisify(client.set).bind(client);
+}
+
 // Er hérna með set í stað mset þannig cache er geymt í sek ekki min
 
 /**
