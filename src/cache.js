@@ -10,6 +10,7 @@ const client = redis.createClient(redisOptions);
 
 const asyncGet = util.promisify(client.get).bind(client);
 const asyncSet = util.promisify(client.set).bind(client);
+// Er hérna með set í stað mset þannig cache er geymt í sek ekki min
 
 /**
  * Returns cached data or null if not cached.

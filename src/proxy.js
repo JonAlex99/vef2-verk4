@@ -23,7 +23,6 @@ async function getData(req, res) {
 
   const site = getUSGS(type, period);
   const cacheKey = `type:${type}-period:${period}`;
-  console.log(cacheKey);
   const timer = timerStart();
 
   let quakes;
@@ -34,7 +33,7 @@ async function getData(req, res) {
     quakes = cached;
   } else {
     quakes = await fetchUSGS(site);
-    set(cacheKey, quakes, 60);
+    set(cacheKey, quakes, 60); // Geymi cache í 60 sek vegna set en ekki mset (cache.js)
   }
 
   const endTimer = timerEnd(timer);

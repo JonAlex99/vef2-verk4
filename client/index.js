@@ -6,6 +6,7 @@ async function moveEarthquakes(type, period, title1) {
   const ul = document.querySelector('.earthquakes');
   const loading = document.querySelector('.loading');
   const cache = document.querySelector('.cache');
+  const head = document.querySelector('h1');
   const earthquakes = await fetchEarthquakes(type, period);
 
   cache.textContent = '';
@@ -14,35 +15,34 @@ async function moveEarthquakes(type, period, title1) {
 
   const parent = loading.parentNode;
 
-  // Fékk frá dæmatímakennara
-  // const url = new URL(link.href);
-  // const { searchParams } = url;
-
-  // const period = searchParams.get('period');
-  // const type = searchParams.get('type');
-
-  // console.log(earthquakes);
+  if (period === 'month"') {
+    head.innerHTML = (`${title1}, Seinasta mánuð`);
+  } else if (period === 'week') {
+    head.innerHTML = (`${title1}, Seinastu viku`);
+  } else if (period === 'day') {
+    head.innerHTML = (`${title1}, Seinasta dag`);
+  } else if (period === 'hour') {
+    head.innerHTML = (`${title1}, Seinastu klukkustund`);
+  }
 
   if (!earthquakes) {
     parent.appendChild(
       el('p', 'Villa við að sækja gögn'),
     );
+  } else if (!earthquakes.info.cache) {
+    cache.appendChild(
+      el('p', 'Gögnin eru ',
+        el('b', 'ekki í cache.'),
+        ' Fyrirspurn tók ',
+        el('b', `${earthquakes.info.time} sek`)),
+    );
   } else {
-      if (!earthquakes.info.cache) {
-      cache.appendChild(
-        el('p', 'Gögnin eru ',
-          el('b', 'ekki í cache.'),
-          ' Fyrirspurn tók ',
-          el('b', `${earthquakes.info.time} sek`)),
-      );
-    } else {
-      cache.appendChild(
-        el('p', 'Gögnin eru ',
-          el('b', 'í cache.'),
-          ' Fyrirspurn tók ',
-          el('b', `${earthquakes.info.time} sek`)),
-      );
-    }
+    cache.appendChild(
+      el('p', 'Gögnin eru ',
+        el('b', 'í cache.'),
+        ' Fyrirspurn tók ',
+        el('b', `${earthquakes.info.time} sek`)),
+    );
   }
 
   earthquakes.data.features.forEach((quake) => {
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      moveEarthquakes(searchParams.get('type'), searchParams.get('period'), '');
+      moveEarthquakes(searchParams.get('type'), searchParams.get('period'), link.innerHTML);
     });
   });
 });
